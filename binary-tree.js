@@ -106,6 +106,44 @@ class Tree {
     array.push(node.data);
     return array;
   }
+
+  depth(node, traverseNode = this.root) {
+    let depth = 1;
+    while (traverseNode.data !== node) {
+      depth++;
+      if (node > traverseNode.data) {
+        traverseNode = traverseNode.right;
+      } else if (node < traverseNode.data) {
+        traverseNode = traverseNode.left;
+      }
+      if (
+        traverseNode.data !== node &&
+        traverseNode.left === null &&
+        traverseNode.right === null
+      )
+        return undefined;
+    }
+    return depth;
+  }
+
+  height(node = this.root) {
+    if (node === null) return 0;
+    const leftHeight = this.height(node.left);
+    const rightHeight = this.height(node.right);
+    if (leftHeight > rightHeight) return leftHeight + 1;
+    else return rightHeight + 1;
+  }
+
+  isBalanced(node = this.root) {
+    const heightDifference = Math.abs(this.height(node.left) - this.height(node.right));
+    if (heightDifference > 1) return false;
+    return true;
+  }
+
+  rebalance() {
+    const tempArray = this.inOrder();
+    this.root = Tree.buildTree(tempArray);
+  }
 }
 //
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -139,12 +177,28 @@ const testArr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 // testTreeTwo.deleteItem(4);
 // prettyPrint(testTreeTwo.root);
 
-const testTreeThree = new Tree(testArr);
-prettyPrint(testTreeThree.root);
+// const testTreeThree = new Tree(testArr);
+// prettyPrint(testTreeThree.root);
 // console.log(testTreeThree.find(9));
 // console.log(testTreeThree.find(1));
 // console.log(testTreeThree.find(10));
-console.log(testTreeThree.levelOrder());
-console.log(testTreeThree.inOrder());
-console.log(testTreeThree.preOrder());
-console.log(testTreeThree.postOrder());
+// console.log(testTreeThree.levelOrder());
+// console.log(testTreeThree.inOrder());
+// console.log(testTreeThree.preOrder());
+// console.log(testTreeThree.postOrder());
+// console.log(testTreeThree.depth(6345));
+// console.log(testTreeThree.height());
+// console.log(testTreeThree.isBalanced());
+
+const testTreeFour = new Tree(testArr)
+prettyPrint(testTreeFour.root)
+console.log(testTreeFour.isBalanced())
+testTreeFour.insertItem(100);
+testTreeFour.insertItem(101);
+testTreeFour.insertItem(102);
+testTreeFour.insertItem(103);
+prettyPrint(testTreeFour.root)
+console.log(testTreeFour.isBalanced())
+testTreeFour.rebalance()
+prettyPrint(testTreeFour.root)
+console.log(testTreeFour.isBalanced())
